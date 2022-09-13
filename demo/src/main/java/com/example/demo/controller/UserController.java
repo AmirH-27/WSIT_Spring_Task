@@ -13,13 +13,10 @@ import java.util.List;
 @RestController
 public class UserController {
     private final UserService userService;
-    private final UserDetailService userDetailService;
-    private final CourseService courseService;
 
-    public UserController(UserService userService, UserDetailService userDetailService , CourseService courseService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userDetailService = userDetailService;
-        this.courseService = courseService;
+
     }
     @RequestMapping("/list")
     public String list() {

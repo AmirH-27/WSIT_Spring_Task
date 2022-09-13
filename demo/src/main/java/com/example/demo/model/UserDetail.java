@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.FetchMode;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ public class UserDetail {
     @Column(name = "image_path")
     private String image_path;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_details_id")
     private List<Course> courses;
 

@@ -14,7 +14,7 @@ public class Course {
     @Column(name = "course_code")
     private String courseCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_details_id")
     private UserDetail userDetail;
 
