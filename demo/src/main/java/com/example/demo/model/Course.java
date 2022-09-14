@@ -14,7 +14,7 @@ public class Course {
     @Column(name = "course_code")
     private String courseCode;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_details_id")
     private UserDetail userDetail;
 
@@ -42,11 +42,11 @@ public class Course {
         this.courseCode = courseCode;
     }
 
-    public UserDetail getUserDetails() {
+    public UserDetail getUserDetail() {
         return userDetail;
     }
 
-    public void setUserDetails(UserDetail userDetail) {
+    public void setUserDetail(UserDetail userDetail) {
         this.userDetail = userDetail;
     }
     public String toString() {
