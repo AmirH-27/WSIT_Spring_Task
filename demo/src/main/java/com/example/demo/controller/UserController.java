@@ -1,58 +1,55 @@
 package com.example.demo.controller;
-import com.example.demo.model.Course;
-import com.example.demo.model.User;
-import com.example.demo.model.UserDetail;
-import com.example.demo.service.CourseService;
-import com.example.demo.service.UserDetailService;
-import com.example.demo.service.UserDetailServiceImp;
-import com.example.demo.service.UserService;
+
+import com.example.demo.dto.CourseReq;
+import com.example.demo.dto.UserDto;
+import com.example.demo.dto.UserRes;
+import com.example.demo.entity.Course;
+import com.example.demo.entity.User;
+import com.example.demo.entity.UserDetail;
+import com.example.demo.repo.CourseRepo;
+import com.example.demo.repo.UserDetailRepo;
+import com.example.demo.repo.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class UserController {
-    private final UserService userService;
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private UserDetailRepo userDetailRepo;
+    @Autowired
+    private CourseRepo courseRepo;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-
+    @PostMapping("/user/add")
+    public User addUser(@RequestParam String name) {
+        User user = new User(name);
+        userRepo.save(user);
+        return user;
     }
-    @RequestMapping("/list")
-    public String list() {
-        List<User> users = new ArrayList<>();
-        users = userService.getUsers();
-        return users.toString();
+    @PostMapping("/user/add/detail")
+    public UserDetail addUserDetail(@RequestParam String email, @RequestParam MultipartFile file, @RequestParam int userId) {
+        UserDetail userDetail = new UserDetail(email, file.getOriginalFilename());
+        User user = userRepo.findById(userId).orElse(null);
+        userDetailRepo.save(userDetail);
+        user.setUserDetail(userDetail);
+        userRepo.save(user);
+        return userDetail;
     }
-    @RequestMapping("/user/{id}")
-    public String getUser(@PathVariable int id) {
-        return userService.getUserById(id).toString();
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
     }
-    @PostMapping("/user/add/{name}")
-    public String addUser(@PathVariable String name) {
-        User user = new User();
-        user.setName(name);
-        userService.save(user);
-        return "User added";
+    @PostMapping("/user")
+    public User getUserById(@RequestParam int id) {
+        return userRepo.findById(id).get();
     }
-
-    @PostMapping("/user/delete/{id}")
-    public String deleteUser(@PathVariable int id) {
-        userService.delete(id);
-        return "User deleted";
-    }
-
-    @PostMapping("/user/update/{id}/{name}")
-    public String updateUser(@PathVariable int id, @PathVariable String name) {
-        User user = new User();
-        user.setId(id);
-        user.setName(name);
-        userService.update(user);
-        return "User updated";
-    }
-
-    @RequestMapping("/user/course/{id}")
-    public String courseList(@PathVariable int id) {
-         return userService.getUserById(id).getUserDetails().getCourses().toString();
+    @GetMapping("/user/course")
+    public List<UserRes> getJoinInformation() {
+        return userRepo.getJoinInformation();
     }
 }
