@@ -9,4 +9,5 @@ then Run....
 In PostMan User can be created with only name 
 
 User details can be added Individually
+
 Courses can also be added Individually 
