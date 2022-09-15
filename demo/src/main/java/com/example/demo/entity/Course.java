@@ -19,4 +19,9 @@ public class Course {
     private int course_id;
     private String course_name;
     private String course_code;
+
+    public Course(String course_name, String course_code) {
+        this.course_name = course_name;
+        this.course_code = course_code;
+    }
 }
